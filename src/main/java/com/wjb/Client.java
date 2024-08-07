@@ -3,13 +3,20 @@ package com.wjb;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class Client {
     public static void main(String[] args) throws Exception {
         Socket socket = new Socket(InetAddress.getLocalHost(), 9999);
-//        C:\Users\wei72\Desktop\psc.jpg
-        File file = new File("C:\\Users\\wei72\\Desktop\\123.jpg");
-        byte[] imageData = readImg(file.getAbsolutePath());
+        File file = new File("C:\\Users\\L\\Desktop\\123.jpg");
+        FileInputStream fis = new FileInputStream(file);
+        byte[] b = new byte[1024];
+        int len;
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        while ((len = fis.read(b)) != -1){
+            bos.write(b, 0, len);
+        }
+        byte[] imageData = bos.toByteArray();
         OutputStream outputStream = socket.getOutputStream();
         outputStream.write(imageData);
         outputStream.close();

@@ -11,12 +11,21 @@ public class Server {
         while (true){
             Socket socket = serverSocket.accept();
             System.out.println("socket地址:"+socket);
-            InputStream inputStream = socket.getInputStream();
-            int read = inputStream.read();
-            System.out.println("read:"+read);
-            inputStream.close();
+            BufferedInputStream bis = new BufferedInputStream(socket.getInputStream());
+            byte[] bytes = new byte[1024];
+            int readLen = 0;
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            while ((readLen = bis.read(bytes)) != -1){
+                bos.write(bytes,0,readLen);
+            }
+            byte[] imageData = bos.toByteArray();
+            String img = "src\\123.jpg";
+            FileOutputStream outputStream = new FileOutputStream(img);
+            outputStream.write(imageData);
+            outputStream.close();
+            bis.close();
+            bos.close();
             socket.close();
-            System.out.println("socket地址222:"+socket);
         }
 
     }
